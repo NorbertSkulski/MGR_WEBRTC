@@ -23,7 +23,7 @@ const options = {
 passport_1.default.use(new passport_jwt_1.Strategy(options, (req, payload, done) => {
     console.log("TESTE::", payload);
     //todo jutro
-    done(null, { uuid: "wqewqeqweqweqwe21321312eqwe", name: "ELIO" });
+    done(null, { uuid: "test", name: payload.name, isAdmin: payload.admin });
 }));
 passport_1.default.serializeUser((user, cb) => {
     process.nextTick(() => {
@@ -38,8 +38,10 @@ passport_1.default.deserializeUser((user, cb) => {
 const Auth = (req, res, next) => passport_1.default.authenticate('jwt', { session: false })(req, res, next);
 exports.Auth = Auth;
 const READ = (req, res, next) => {
-    console.log("is_Auth: ", req.isAuthenticated());
-    // next()
+    console.log("is_Auth: ", req.user);
+    if (req.user && req.user.isAdmin) {
+        return next();
+    }
     next(Errors_1.perrmieionsError);
 };
 exports.READ = READ;
