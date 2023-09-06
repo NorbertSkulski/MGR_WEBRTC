@@ -16,7 +16,7 @@ const sequelize: Sequelize = new Sequelize({
     logging: process.env.DEVELOPMENT=='true'
 });
 
-sequelize.addModels([__dirname+'/models'])
+sequelize.addModels([__dirname+'/Models'])
 
 
 export default sequelize;

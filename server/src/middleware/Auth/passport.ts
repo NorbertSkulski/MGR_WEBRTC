@@ -2,8 +2,8 @@ import passport from 'passport';
 import { Strategy as JwtStrategy } from 'passport-jwt';
 import { get } from 'lodash';
 import { Request, Response, NextFunction } from 'express';
-import { User } from '../../model/models/User';
-import { perrmieionsError } from '../../utils/Errors/Errors';
+import { User } from '../../model/Models/User';
+import { permissionError } from '../../utils/Errors/Errors';
 
 
 const customExtractor = (req: Request) => {
@@ -21,13 +21,13 @@ const options: object = {
 }
 
 
-passport.use(new JwtStrategy(options, (req,payload, done) => {
+passport.use(new JwtStrategy(options, (req, payload, done) => {
 
     console.log("TESTE::", payload)
     //todo jutro
 
 
-    done(null, {uuid:"test", name:payload.name, isAdmin: payload.admin})
+    done(null, { uuid: "test", name: payload.name, isAdmin: payload.admin })
 
 }))
 
@@ -36,20 +36,20 @@ passport.serializeUser((user: User, cb) => {
         cb(null, { id: user.uuid, username: user.name })
     })
 })
-passport.deserializeUser((user:User, cb) => {
+passport.deserializeUser((user: User, cb) => {
     process.nextTick(() => {
         cb(null, user)
     })
 })
 
 
-export const Auth = (req:Request, res:Response, next:NextFunction) => passport.authenticate('jwt', { session: false  })(req, res,next);
+export const Auth = (req: Request, res: Response, next: NextFunction) => passport.authenticate('jwt', { session: false })(req, res, next);
 
-export const READ = (req:Request, res:Response, next:NextFunction) => {
-    console.log("is_Auth: ",req.user)
-    if(req.user&& req.user.isAdmin){
+export const READ = (req: Request, res: Response, next: NextFunction) => {
+    console.log("is_Auth: ", req.user)
+    if (req.user && req.user.isAdmin) {
         return next();
     }
-    
-    next(perrmieionsError);   
+
+    next(permissionError);
 };

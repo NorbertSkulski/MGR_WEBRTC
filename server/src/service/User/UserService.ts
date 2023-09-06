@@ -1,4 +1,4 @@
-import { User } from "../../model/models/User";
+import { User } from "../../model/Models/User";
 
 const registration = async (user: User) => {
     const newUser: User = new User({ ...user });

@@ -1,3 +1,3 @@
-import { ERROR_TYPE } from "../../Types/Errors";
+import { ERROR_TYPE } from "../../types/Errors";
 
-export const perrmieionsError: ERROR_TYPE = {code: 403, message:"User not perrmision"};
+export const permissionError: ERROR_TYPE = {code: 403, message:"User not perrmision"};

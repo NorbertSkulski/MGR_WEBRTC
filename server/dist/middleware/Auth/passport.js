@@ -42,6 +42,6 @@ const READ = (req, res, next) => {
     if (req.user && req.user.isAdmin) {
         return next();
     }
-    next(Errors_1.perrmieionsError);
+    next(Errors_1.permissionError);
 };
 exports.READ = READ;

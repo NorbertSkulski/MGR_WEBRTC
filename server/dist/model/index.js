@@ -15,5 +15,5 @@ const sequelize = new sequelize_typescript_1.Sequelize({
     password: password,
     logging: process.env.DEVELOPMENT == 'true'
 });
-sequelize.addModels([__dirname + '/models']);
+sequelize.addModels([__dirname + '/Models']);
 exports.default = sequelize;
