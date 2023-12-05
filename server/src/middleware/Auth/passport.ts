@@ -1,9 +1,10 @@
 import passport from 'passport';
-import { Strategy as JwtStrategy } from 'passport-jwt';
+import { Strategy as JwtStrategy, StrategyOptions } from 'passport-jwt';
 import { get } from 'lodash';
 import { Request, Response, NextFunction } from 'express';
-import { User } from '../../model/Models/User';
 import { permissionError } from '../../utils/Errors/Errors';
+import { User } from '@prisma/client';
+import { checkIsUser } from '../../utils/Types/CheckType';
 
 
 const customExtractor = (req: Request) => {
@@ -13,7 +14,7 @@ const customExtractor = (req: Request) => {
     return null;
 }
 
-const options: object = {
+const options: StrategyOptions = {
     passReqToCallback: true,
     jwtFromRequest: customExtractor,
     secretOrKey: process.env.SECRET_JWT,
@@ -21,19 +22,19 @@ const options: object = {
 }
 
 
-passport.use(new JwtStrategy(options, (req, payload, done) => {
+passport.use(new JwtStrategy(options, (req: Request, payload: any, done: Function) => {
 
-    console.log("TESTE::", payload)
-    //todo jutro
+    console.log("TEST:", payload)
+    //todo 
 
 
     done(null, { uuid: "test", name: payload.name, isAdmin: payload.admin })
 
 }))
 
-passport.serializeUser((user: User, cb) => {
+passport.serializeUser((user: User | any, cb) => {
     process.nextTick(() => {
-        cb(null, { id: user.uuid, username: user.name })
+        cb(null, { id: user.uuid })
     })
 })
 passport.deserializeUser((user: User, cb) => {
@@ -46,10 +47,11 @@ passport.deserializeUser((user: User, cb) => {
 export const Auth = (req: Request, res: Response, next: NextFunction) => passport.authenticate('jwt', { session: false })(req, res, next);
 
 export const READ = (req: Request, res: Response, next: NextFunction) => {
-    console.log("is_Auth: ", req.user)
-    if (req.user && req.user.isAdmin) {
-        return next();
+    if (checkIsUser(req.user)) {
+        if (req.user.admin) {
+            return next();
+        }
     }
-
     next(permissionError);
 };
+

@@ -1,8 +1,9 @@
-import { User } from "../../model/Models/User";
+import { User } from "@prisma/client";
+import { prisma } from "../../database/Datadase";
 
-const registration = async (user: User) => {
-    const newUser: User = new User({ ...user });
-    return await newUser.save()
+const registration = async (user: User) : Promise<User> => {
+    
+  return await prisma.user.create({data:user});;
 }
 
 export { registration }

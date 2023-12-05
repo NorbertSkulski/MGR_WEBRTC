@@ -2,14 +2,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express, { Express } from 'express';
 import controller from './controller';
-import sequelize from "./model"
 import cookieParser from "cookie-parser";
 import { app_session } from './middleware/Session/Session';
 import { ErrorHandler } from './middleware/ErrorHandler/ErrorHandler';
-
-
-sequelize.sync();
-
 
 const app: Express = express();
 const port = process.env.PORT;

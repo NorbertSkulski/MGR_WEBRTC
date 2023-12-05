@@ -8,6 +8,7 @@ const passport_1 = __importDefault(require("passport"));
 const passport_jwt_1 = require("passport-jwt");
 const lodash_1 = require("lodash");
 const Errors_1 = require("../../utils/Errors/Errors");
+const CheckType_1 = require("../../utils/Types/CheckType");
 const customExtractor = (req) => {
     const token = (0, lodash_1.get)(req, 'signedCookies.Authorization', null);
     if (token && token.startsWith("Bearer"))
@@ -21,13 +22,13 @@ const options = {
     algorithms: ['HS512']
 };
 passport_1.default.use(new passport_jwt_1.Strategy(options, (req, payload, done) => {
-    console.log("TESTE::", payload);
-    //todo jutro
+    console.log("TEST:", payload);
+    //todo 
     done(null, { uuid: "test", name: payload.name, isAdmin: payload.admin });
 }));
 passport_1.default.serializeUser((user, cb) => {
     process.nextTick(() => {
-        cb(null, { id: user.uuid, username: user.name });
+        cb(null, { id: user.uuid });
     });
 });
 passport_1.default.deserializeUser((user, cb) => {
@@ -38,9 +39,10 @@ passport_1.default.deserializeUser((user, cb) => {
 const Auth = (req, res, next) => passport_1.default.authenticate('jwt', { session: false })(req, res, next);
 exports.Auth = Auth;
 const READ = (req, res, next) => {
-    console.log("is_Auth: ", req.user);
-    if (req.user && req.user.isAdmin) {
-        return next();
+    if ((0, CheckType_1.checkIsUser)(req.user)) {
+        if (req.user.admin) {
+            return next();
+        }
     }
     next(Errors_1.permissionError);
 };

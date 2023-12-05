@@ -2,11 +2,11 @@ import session from 'express-session';
 import pg from 'pg';
 import connectPgSimple from 'connect-pg-simple';
 
-const host: string = process.env.DB_HOST;
+const host: string = String(process.env.DB_HOST);
 const port: number = Number(process.env.DB_PORT);
-const username: string = process.env.DB_USERNAME;
-const password: string = process.env.DB_PASSWORD;
-const database: string = process.env.DB_NAME;
+const username: string = String(process.env.DB_USERNAME);
+const password: string = String(process.env.DB_PASSWORD);
+const database: string = String(process.env.DB_NAME);
 
 const dayTll = 24 * 60 * 60 * 1000;
 const pgSession = connectPgSimple(session);
@@ -20,19 +20,23 @@ const pgPool = new pg.Pool({
 })
 
 const app_session = session({
-    secret: process.env.SECRET_SESSION,
+    secret: String(process.env.SECRET_SESSION),
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     store: new pgSession({
         pool: pgPool,
         tableName: "session_webrtc",
-        createTableIfMissing:true,
+        createTableIfMissing: true,
     }),
     cookie: {
         maxAge: dayTll,
         secure: true,
-        httpOnly: true
+        httpOnly: true,
+        sameSite:true,
+        signed:true
     }
 });
 
-export { app_session };
+console.log("Sess: ", app_session)
+
+export {app_session}

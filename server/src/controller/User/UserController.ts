@@ -6,6 +6,7 @@ const router: Router = Router();
 
 
 router.get('/',Auth,READ, (req: Request, res: Response) => {
+    console.log(req.session)
     res.send('Server running');
 });
 
