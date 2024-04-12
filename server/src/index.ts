@@ -5,6 +5,7 @@ import controller from './controller';
 import cookieParser from "cookie-parser";
 import { app_session } from './middleware/Session/Session';
 import { ErrorHandler } from './middleware/ErrorHandler/ErrorHandler';
+import { socketInit } from './sockets';
 
 const app: Express = express();
 const port = process.env.PORT;
@@ -20,6 +21,8 @@ app.use(path, controller);
 //ERROR_HANDLER
 app.use(ErrorHandler);
 
-app.listen(port, () => {
-  console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+const server = socketInit(app);
+
+server.listen(port, () => {
+  console.log(`⚡️[server]: Server is running at port: ${port}`);
 });

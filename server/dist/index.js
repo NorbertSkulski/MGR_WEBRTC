@@ -10,6 +10,7 @@ const controller_1 = __importDefault(require("./controller"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const Session_1 = require("./middleware/Session/Session");
 const ErrorHandler_1 = require("./middleware/ErrorHandler/ErrorHandler");
+const sockets_1 = require("./sockets");
 const app = (0, express_1.default)();
 const port = process.env.PORT;
 const path = process.env.INIT_PATH || "/";
@@ -20,6 +21,7 @@ app.use((0, cookie_parser_1.default)(process.env.SECRET_SESSION));
 app.use(path, controller_1.default);
 //ERROR_HANDLER
 app.use(ErrorHandler_1.ErrorHandler);
-app.listen(port, () => {
-    console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+const server = (0, sockets_1.socketInit)(app);
+server.listen(port, () => {
+    console.log(`⚡️[server]: Server is running at port: ${port}`);
 });
