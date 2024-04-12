@@ -1,0 +1,13 @@
+@import '~bootstrap/scss/bootstrap';
+
+.App {
+  width: 100dvw;
+  height: 100dvh;
+  background-color: var(--global-white);
+  background-size: cover;
+  background-image: url("./assets/images/SL_060521_43530_17.jpg");
+  //app global colors;
+  --global-white: rgba(255,255,255,1)
+
+}
+

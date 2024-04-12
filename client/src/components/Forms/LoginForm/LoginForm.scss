@@ -1,0 +1,14 @@
+.LoginForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    backdrop-filter: blur(20px);
+    background-color: rgba(28, 91, 228, 0.2);
+    height: fit-content;
+    .Input {
+        .MuiInputBase-root {
+            background-color: var(--global-white);
+        }
+    }
+}
