@@ -7,7 +7,7 @@ type AuthElementType = {
 }
 export const AuthElement = (props:AuthElementType) =>{
     const {children} = props
-    const {isAuth} = useSelector((state:any) => state?.user);
+    const {isAuth} = useSelector((state:any) => state?.AuthReducer);
     
     return isAuth?children:<Navigate to="/login"/>
 } 

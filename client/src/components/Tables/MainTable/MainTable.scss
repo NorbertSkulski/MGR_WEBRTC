@@ -1,0 +1,33 @@
+.MainTable {
+    overflow: auto;
+    max-height: 30rem;
+    border: 1px solid var(--global-white);
+
+    table {
+        width: 100%;
+        height: 100%;
+    }
+    thead,
+    tbody {
+        padding: 0.3rem;
+    }
+    td,
+    th {
+        padding-right: 1rem;
+        padding-left: 0.3rem;
+        border-bottom: 1px solid var(--global-white);
+        border-right: 1px solid var(--global-white);
+        height: 3rem;
+        vertical-align: middle;
+    }
+
+    tbody {
+        tr {
+            &:last-child {
+                td {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+}

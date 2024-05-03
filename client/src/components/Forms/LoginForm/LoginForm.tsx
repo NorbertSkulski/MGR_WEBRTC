@@ -7,11 +7,12 @@ import AppLogo from "../../../assets/images/video-call.png";
 
 const LoginForm = () => {
   const { handleSubmit, ...rest } = useForm();
+
   return (
     <form className="LoginForm" onSubmit={handleSubmit(onSubmit)}>
       <img className="my-5" src={AppLogo} width={150} height={150}/>
       <Input
-        variant="outlined"
+        variant="filled"
         type="text"
         name="login"
         label="Login"
@@ -19,7 +20,7 @@ const LoginForm = () => {
         validation={{ required: "pole wymagane" }}
       />
       <Input        
-        variant="outlined"
+        variant="filled"
         type="password"
         name="password"
         label="Password"

@@ -1,8 +1,10 @@
 import {  Route, Routes, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../../hooks/redux/reduxHook";
-import { add, divide } from "../../store";
 import { useQuery } from "@tanstack/react-query";
 import "../Dashboard/Dashboard.scss"
+import MenuList from "../../components/MenuList/MenuList";
+import FriendsList from "../../components/FriendsList/FriendsList";
+import ContentArea from "../../components/ContentArea/ContentArea";
 
 const Dashboard = (props: Object) => {
   console.log(props);
@@ -17,34 +19,9 @@ const Dashboard = (props: Object) => {
 
   return (
     <div className="Dashboard">
-      <div>
-          <Routes>
-            <Route path="/contact" element={<div>"Contact"</div>} />
-          </Routes>
-      Dashboard{" "}
-      <button
-        onClick={() => {
-          navigate("/login");
-        }}
-      >
-        Click
-      </button>
-      <button
-        onClick={() => {
-          dispatch(add({value:22,isAuth:false}))
-        }}
-      >
-        Click2
-      </button>
-      <button
-        onClick={() => {
-          dispatch(divide({value:21}))
-        }}
-      >
-        Click3
-      </button>
-      </div>
-      
+      <MenuList/>
+      <FriendsList/>
+      <ContentArea/>
     </div>
   );
 };

@@ -1,0 +1,50 @@
+.ContentArea {
+    grid-area: contentArea;
+    height: 100%;
+    width: 98%;
+    margin-top:1dvh;
+    margin-left: 1%;
+    padding: 1rem;
+    opacity: 0;
+    backdrop-filter: blur(3px);
+    background-color: rgba(28, 91, 228, 0.2);
+    border: 1px solid rgba(28, 91, 228, 0.4);
+    border-radius: 15px;
+    animation: show .2s ease both;
+    max-height: 98dvh;
+    overflow: hidden;
+    >*{
+        overflow: hidden;
+        max-height: max-content;
+        margin: 2rem 2rem;
+    }
+
+    &.Hide{
+        animation: hide .2s ease both;
+    }
+
+}
+
+@keyframes show {
+
+    0%{
+        opacity: 0;
+    }
+
+    100%{
+        opacity: 1;
+    }
+    
+}
+
+@keyframes hide {
+
+    0%{
+        opacity: 1;
+    }
+
+    100%{
+        opacity: 0;
+    }
+    
+}

@@ -1,0 +1,68 @@
+.MenuList {
+    grid-area: menuListArea;
+    height: 100%;
+    width: 16rem;
+    backdrop-filter: blur(3px);
+    background-color: rgba(28, 91, 228, 0.2);
+    border-right: 1px solid rgba(28, 91, 228, 0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    * {
+        color: var(--global-white);
+    }
+    .ProfileContent {
+        --badge-color: red;  
+        display: flex;
+        justify-content: flex-start;
+        margin-left: 3rem;
+        align-items: flex-start;
+        margin-top: 3rem;
+        height: 15%;
+        &.pending{
+            --badge-color:blue;
+        }
+        &.connected{
+            --badge-color:green;
+        }
+        .MuiAvatar-root{
+            width: 3rem;
+            height: 3rem;
+        }
+        .MuiBadge-badge {
+            background-color: var(--badge-color);
+            width: 1rem;
+            height: 1rem;
+            border-radius: 100%;
+        }  
+
+        .AvatarName {               
+            justify-content: flex-start;
+            margin-left: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            font-weight: 600;
+            margin-top: 1rem;
+            height: fit-content;     
+            max-width: 10rem;
+            overflow: hidden;
+            word-wrap: break-word;    
+        }
+        
+    }
+    .RouteContent{
+        height: 70%;
+        margin-top: 5rem;
+    }
+    .FooterContent {
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        margin-bottom: 2rem;
+        height: 15%;
+        .LogOutButton{
+            color: var(--global-white);
+            border-color: var(--global-white);
+        }
+    }
+}
