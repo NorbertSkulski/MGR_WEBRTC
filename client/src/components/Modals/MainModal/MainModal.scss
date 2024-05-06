@@ -1,0 +1,32 @@
+.MainModal {
+    border: 1px solid rgba(28, 91, 228, 0.4);
+    background: rgba(255,255,255,1);
+    position: fixed;
+    translate: -50% -50%;
+    top: 50%;
+    left: 50%;
+    z-index: 100;
+    min-width: 40%;
+    min-height: 30%;
+    border-radius: 10px;
+    .ModalHeader{
+        padding: 1rem 1rem 0.5rem 1rem;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(28, 91, 228, 0.4);
+    }
+    .ModalBody{
+        padding: 0.5rem 1rem;
+    }
+}
+
+.BackgroundModal{
+    position: absolute;
+    width: 100dvw;
+    height: 100dvh;
+    translate: -50% -50%;
+    top: 50%;
+    left: 50%;
+    background: rgba(0,0,0,.4);
+    z-index: 99;
+}

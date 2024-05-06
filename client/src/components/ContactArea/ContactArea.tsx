@@ -1,8 +1,10 @@
 import { Button } from "@mui/material";
 import MainTable from "../Tables/MainTable/MainTable";
 import "./ContactArea.scss";
+import AddFriendModal from "../Modals/AddFriendModal/AddFriendModal";
 
 const ContactArea = () => {
+
   return (
     <div className="ContactArea">
       <h3>Kontakty</h3>
@@ -19,6 +21,7 @@ const ContactArea = () => {
           { name: "Agata", lastName: "Gromek" }            
         ]}
       />
+      <AddFriendModal/>
     </div>
   );
 };

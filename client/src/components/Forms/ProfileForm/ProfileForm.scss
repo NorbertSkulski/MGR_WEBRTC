@@ -1,5 +1,33 @@
 .ProfileForm{
+    position: relative;
     .ProfileImage{
         display: none;
+    }
+
+    > form {
+        background-color: var(--global-white);
+        border-radius: 10px;
+        padding: 1rem;
+        border: 1px solid rgba(28, 91, 228, 0.4);
+        height: 85dvh !important;
+
+        .SubmitButton{
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            background-color: var(--global-success);
+        }
+    }
+    .AvatarArea{
+        position: absolute;
+        right: 5rem;
+        top:3rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        .Image{
+            width: 10rem;
+            height: 10rem;
+        }
     }
 }
