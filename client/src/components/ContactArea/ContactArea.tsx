@@ -12,13 +12,14 @@ const ContactArea = () => {
         style={{maxHeight: "45rem"}}
         className="mt-5"
         headers={[
+          { key: "id", name:"ID",width:"100px"},
           { key: "name", name: "Imie", width:"auto" },
           { key: "lastName", name: "Nazwisko", width:"auto" },
           { key: "buttons", width:"8%" },
         ]}
         data={[
           { name: "Norbert", lastName: "Skulski" },
-          { name: "Agata", lastName: "Gromek" }            
+          { name: "AdminAgata", lastName: "AdminGromek" }            
         ]}
       />
       <AddFriendModal/>

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import MainModal from "../MainModal/MainModal";
 import { Button } from "react-bootstrap";
+import AddFriendForm from "../../Forms/AddFriendForm/AddFriendForm";
 
 const AddFriendModal = () => {
   const [show, setShow] = useState(false);
+  const hideModal = () => setShow(false);
 
   return (
     <>
@@ -16,8 +18,7 @@ const AddFriendModal = () => {
       </Button>
 
       <MainModal headerText="Dodaj znajomego" show={show} setShow={setShow}>
-        TEST
-        <Button onClick={() => setShow(false)}>Hide</Button>
+        <AddFriendForm hideModal={hideModal}/>
       </MainModal>
     </>
   );

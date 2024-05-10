@@ -2,7 +2,7 @@ import {useEffect, useRef} from "react";
 export const usePortal =(id:string)=> {
     const rootElemRef = useRef(document.createElement('div'));
 
-    useEffect(function setupElement() {
+    useEffect(() => {
       // Look for existing target dom element to append to
       const parentElem:any = document.querySelector(`#${id}`);
       // Add the detached element to the parent
