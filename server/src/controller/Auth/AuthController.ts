@@ -1,15 +1,16 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { login } from "../../service/Auth/AuthService";
+import { permissionError } from "../../utils/Errors/Errors";
 
 const router: Router = Router();
 
 router.post('/login', async (req: Request, res: Response, next:NextFunction) => {
     try {
-        const {token, userlogin} = await login(req.body);
+        const {token, userData} = await login(req.body);
         res.cookie("Authorization",`${token}`,{signed:true,httpOnly:true, secure:true, sameSite:true})
-        res.json({login:userlogin});
+        res.json(userData);
     } catch (err) {
-        next(err);
+        next(permissionError);
     }
 });
 

@@ -1,4 +1,17 @@
 .InvitationElement{  
         margin-left: .3rem;   
         margin-bottom: .3rem; 
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--global-white);
+        padding: 0.3rem;
+        position: relative;
+        border-radius: 8px;
+        background-color: var(--global-white);
+        color: black;
+        .IdArea{
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+        }
 }

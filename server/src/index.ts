@@ -6,13 +6,14 @@ import cookieParser from "cookie-parser";
 import { app_session } from './middleware/Session/Session';
 import { ErrorHandler } from './middleware/ErrorHandler/ErrorHandler';
 import { socketInit } from './sockets';
+import { innerCors } from './middleware/Cors/Cors';
 
 const app: Express = express();
 const port = process.env.PORT;
 const path: string = (process.env.INIT_PATH as string) || "/";
 
 
-
+app.use(innerCors)
 app.use(express.json());
 app.use(app_session)
 app.use(cookieParser(process.env.SECRET_SESSION));

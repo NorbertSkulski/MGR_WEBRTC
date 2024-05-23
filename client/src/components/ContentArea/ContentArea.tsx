@@ -2,16 +2,17 @@ import { Route, Routes } from "react-router-dom";
 import "./ContentArea.scss";
 import ContactArea from "../ContactArea/ContactArea";
 import ProfileArea from "../ProfileArea/ProfileArea";
+import VideoCallArea from "../VideoCallArea/VideoCallArea";
 
 
 
 
 const ContentArea = () => {
 
-
   const dashboardRoutes = [
     {path: "/contact", element:<ContactArea/>},
-    {path:"/profile", element:<ProfileArea/>}
+    {path:"/profile", element:<ProfileArea/>},
+    {path:"/call/:roomId", element:<VideoCallArea/>}
   ]
 
   return (

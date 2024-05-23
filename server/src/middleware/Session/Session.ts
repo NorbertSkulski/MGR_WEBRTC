@@ -37,6 +37,5 @@ const app_session = session({
     }
 });
 
-console.log("Sess: ", app_session)
 
 export {app_session}

@@ -6,6 +6,6 @@ const ErrorHandler = (err, req, res, next) => {
     if (!err) {
         next();
     }
-    res.status(err.code).json(err);
+    res.status(err.code).json(err.message);
 };
 exports.ErrorHandler = ErrorHandler;

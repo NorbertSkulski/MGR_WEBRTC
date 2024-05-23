@@ -10,11 +10,20 @@ type TextInputProps = {
   variant?: TextFieldVariants;
   className?: string;
   onChange?: Function;
+  accept?: string;
 };
 
 const Input = (props: TextInputProps) => {
-  const { form, name, validation, variant, className, onChange, ...rest } =
-    props;
+  const {
+    form,
+    name,
+    validation,
+    variant,
+    className,
+    onChange,
+    accept,
+    ...rest
+  } = props;
   const error = get(form, `formState.errors.${name}.message`, null);
   const register = form?.register(name, validation);
   const { onChange: regOnChange } = register;
@@ -32,10 +41,13 @@ const Input = (props: TextInputProps) => {
         variant={variant || "standard"}
         error={Boolean(error)}
         id={name}
+        inputProps={{accept:accept}}
         {...rest}
         {...register}
         onChange={innerOnChange}
         helperText={error}
+        accept={accept}
+        
       />
     </>
   );

@@ -11,16 +11,50 @@ datasource db {
 }
 
 model User {
-  uuid String @id @default(uuid())
-  email String  @unique
-  name  String
-  phone String?
-  login String @unique 
-  password String 
-  admin Boolean @default(false)
-  deleted Boolean @default(false)
-  banned Boolean @default(false)
-  permissions Permission[] @default([READ])
+  uuid              String          @id @default(uuid())
+  email             String          @unique
+  id                Int             @unique @default(autoincrement())
+  name              String
+  lastName          String
+  phone             String?
+  login             String          @unique
+  password          String
+  admin             Boolean         @default(false)
+  deleted           Boolean         @default(false)
+  banned            Boolean         @default(false)
+  permissions       Permission[]    @default([READ])
+  status            Status          @default(ONLINE)
+  friends           UsersToUsers[]  @relation("Friends")
+  friendOf          UsersToUsers[]  @relation("FriendOf")
+  profileImage      String?
+  friendRequestTo   FriendRequest[] @relation("FriendRequestTo")
+  friendRequestFrom FriendRequest[] @relation("FriendRequestFrom")
+}
+
+model UsersToUsers {
+  userUuid   String
+  friendUuid String
+  user       User   @relation("FriendOf", fields: [userUuid], references: [uuid], onDelete: Cascade, onUpdate: Cascade)
+  friend     User   @relation("Friends", fields: [friendUuid], references: [uuid], onDelete: Cascade, onUpdate: Cascade)
+
+  @@id([userUuid, friendUuid])
+}
+
+model FriendRequest {
+  uuid      String   @unique @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  accepted Boolean @default(false)
+  fromUserUuid String
+  toUserUuid   String
+  fromUser     User   @relation("FriendRequestFrom", fields: [fromUserUuid], references: [uuid], onDelete: Cascade, onUpdate: Cascade)
+  toUser       User   @relation("FriendRequestTo", fields: [toUserUuid], references: [uuid], onDelete: Cascade, onUpdate: Cascade)
+
+}
+
+enum Status {
+  ONLINE
+  OFFLINE
 }
 
 enum Permission {
@@ -29,7 +63,6 @@ enum Permission {
   DELETE
   UPDATE
 }
-
 
 // model Permission {
 //   uuid String @id @default(uuid())

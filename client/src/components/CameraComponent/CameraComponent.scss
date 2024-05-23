@@ -1,0 +1,11 @@
+.CameraComponent {
+    background: linear-gradient(to right, rgba(0, 255, 255, 0.822) 30%, purple 70%);
+    margin: 1rem;
+    height: calc(100% - 2rem);
+
+    video {
+        width: 100%;
+        height: 100%;
+        object-fit: fill;
+    }
+}

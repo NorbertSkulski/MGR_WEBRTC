@@ -7,10 +7,10 @@ import { Button, Icon, IconButton } from "@mui/material";
 type MainModalType = {
   children: ReactNode;
   show: boolean;
-  setShow: Function;
+  setShow?: Function;
   headerText?: string;
-  width?:string;
-  height?:string;
+  width?: string;
+  height?: string;
 };
 
 const MainModal = (props: MainModalType) => {
@@ -21,14 +21,17 @@ const MainModal = (props: MainModalType) => {
 
   useEffect(() => {
     const clickLisener = (e: any) => {
-      if(e?.target?.type==='button'){
+      if (
+        e?.target?.type === "button" ||
+        e?.target?.offsetParent?.type === "button"
+      ) {
         return;
       }
-      if (!modalRef?.current?.contains(e?.target)) setShow(false);
+      if (!modalRef?.current?.contains(e?.target) && setShow) setShow(false);
     };
     document.addEventListener("click", clickLisener);
     return () => document.removeEventListener("click", clickLisener);
-  },[]);
+  }, []);
 
   if (!show) {
     return null;
@@ -36,12 +39,14 @@ const MainModal = (props: MainModalType) => {
 
   return createPortal(
     <>
-      <div style={{width,height}} ref={modalRef} className="MainModal">
+      <div style={{ width, height }} ref={modalRef} className="MainModal">
         <div className="ModalHeader">
           <h4>{headerText || "Header"}</h4>
-          <IconButton onClick={() => setShow(false)}>
-            <Icon>close</Icon>
-          </IconButton>
+          {setShow ? (
+            <IconButton onClick={() => setShow(false)}>
+              <Icon>close</Icon>
+            </IconButton>
+          ) : null}
         </div>
         <div className="ModalBody"> {children}</div>
       </div>

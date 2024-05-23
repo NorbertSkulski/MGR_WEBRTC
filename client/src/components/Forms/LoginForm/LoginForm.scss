@@ -1,4 +1,5 @@
 .LoginForm {
+    padding: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -11,4 +12,12 @@
             background-color: var(--global-white);
         }
     }
+    .LoaderContainer{
+        min-height:16rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+    }
+    
 }

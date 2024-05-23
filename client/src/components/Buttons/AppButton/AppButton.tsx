@@ -10,10 +10,11 @@ type AppButtonType = {
   type: "button" | "submit" | "reset" | undefined;
   variant: "outlined" | "text" | "contained";
   style?:CSSProperties;
+  form?:string
 };
 
 const AppButton = (props: AppButtonType) => {
-  const { className, onClick, children, onMouseUp,style, ...rest } = props;
+  const { className, onClick, children, onMouseUp,style ,...rest } = props;
   return (
     <Button
       className={`AppButton ${className}`}

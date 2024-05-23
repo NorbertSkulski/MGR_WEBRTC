@@ -1,7 +1,7 @@
 import { Avatar, Button } from "@mui/material";
 import Input from "../../Inputs/Input/Input";
 import "./ProfileForm.scss";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { onSubmit } from "./ProfileFormSubmit";
 import { get } from "lodash";
@@ -29,8 +29,9 @@ const ProfileForm = () => {
       setAvatarUrl(url);
     };
     fileReader.readAsDataURL(image);
+    // eslint-disable-next-line
   }, [watch("ProfileImage")]);
-
+  
   return (
     <div className="ProfileForm">
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -41,6 +42,7 @@ const ProfileForm = () => {
             name="ProfileImage"
             form={rest}
             type="file"
+            accept="image/png, image/jpeg"
           />
           <Button onClick={selectPicture}>Dodaj zdjęcie</Button>
         </div>

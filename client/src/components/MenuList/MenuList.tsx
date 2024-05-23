@@ -11,10 +11,19 @@ import {
   Button,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { GlobalFetch } from "../../utils/Fetch/FetchUtils";
+import { useDispatch, useSelector } from "react-redux";
+import { setAuth } from "../../redux/reducers/AuthReducer/AuthReducer";
+// @ts-ignore: Unreachable code error
+import {NotificationManager} from 'react-notifications';
 
 const MenuList = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const unAuth = () => dispatch(setAuth(false)); 
+
+  const userData = useSelector((state:any)=> state?.AuthReducer?.user);
   // zrobić hook 
   const [userStatus,setUserStatus ]= useState("connected");
 
@@ -56,7 +65,15 @@ const MenuList = () => {
     },300);    
   }
 
-  
+  const logOut = async () => {
+    const payload = await GlobalFetch({method:"POST", url:"/auth/logout"})
+    if(!payload || payload.status >=300){
+      return;
+    }
+
+    unAuth();
+    NotificationManager.success("Wylogowano !")
+  }
 
   return (
     <div className="MenuList">
@@ -66,11 +83,12 @@ const MenuList = () => {
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           variant="dot"
         >
-          <Avatar>NS</Avatar>
+          <Avatar alt="userImage" src={userData?.profileImage}>{`${userData?.name?.at(0)?.toUpperCase()}${userData?.lastName?.at(0)?.toUpperCase()}`}</Avatar>
         </Badge>
         <div className="AvatarName">
-          <span className="FirstName">Norbert</span>
-          <span className="LastName">Skulski</span>
+          <span className="FirstName">{userData?.name}</span>
+          <span className="LastName">{userData?.lastName}</span>
+          <span className="Id">id: {userData?.id}</span>
 
         </div>
       </div>
@@ -88,7 +106,7 @@ const MenuList = () => {
       </div>
 
       <div className="FooterContent"> 
-        <Button className="LogOutButton" variant="outlined">Wyloguj</Button>
+        <Button className="LogOutButton" variant="outlined" onClick={logOut}>Wyloguj</Button>
       </div>
     </div>
   );

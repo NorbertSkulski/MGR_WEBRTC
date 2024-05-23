@@ -8,5 +8,5 @@ export const ErrorHandler = (err:ERROR_TYPE,req:Request,res:Response,next:NextFu
     if(!err){
         next();
     }
-    res.status(err.code).json(err);
+    res.status(err.code).json(err.message);
 } 

@@ -39,4 +39,3 @@ const app_session = (0, express_session_1.default)({
     }
 });
 exports.app_session = app_session;
-console.log("Sess: ", app_session);

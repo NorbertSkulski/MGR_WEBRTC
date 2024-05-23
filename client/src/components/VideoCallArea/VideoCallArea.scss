@@ -1,0 +1,16 @@
+.VideoCallArea{
+    position: absolute;
+    display: grid;
+    background: black;
+    width: 90%;
+    height: 90%;
+    top:50%;
+    left:50%;
+    translate: -50% -50%;
+    margin: 0;
+    padding: 1rem 1rem;
+    align-items: center;
+
+    grid-template-rows: repeat(auto-fit, minmax(15rem,1fr));
+    grid-template-columns: repeat(auto-fit, minmax(20rem,1fr));
+}

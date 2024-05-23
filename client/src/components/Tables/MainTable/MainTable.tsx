@@ -22,7 +22,7 @@ const MainTable = (props: MainTableType) => {
       <table>
         <thead>
           <tr>
-            {headers.map((header, index) => (
+            {headers?.map((header, index) => (
               <th
                 style={{
                   maxWidth: header?.width,
@@ -37,9 +37,9 @@ const MainTable = (props: MainTableType) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((data, index) => (
+          {data?.map((data, index) => (
             <tr key={`DataTr-${index}`}>
-              {headers.map((header, idx) => (
+              {headers?.map((header, idx) => (
                 <td
                   style={{
                     maxWidth: header?.width,

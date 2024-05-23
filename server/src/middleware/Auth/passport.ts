@@ -10,6 +10,7 @@ import { prisma } from '../../database/Datadase';
 
 const customExtractor = (req: Request) => {
     const token: string = get(req, 'signedCookies.Authorization', null);
+
     if (token && token.startsWith(`${process.env.TOKEN_PREFIX}`))
         return token.replace(`${process.env.TOKEN_PREFIX}`, "").trim();
     return null;
