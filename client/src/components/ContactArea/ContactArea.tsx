@@ -21,13 +21,17 @@ const ContactArea = () => {
       ),
   });
 
-  const socket: Socket = useSelector(
-  
+  const socket: Socket = useSelector(  
   (state: any) => state?.SocketReducer?.socket
   );
+
   socket.on("callRejected",()=>{
     setShowCallModal(false);
   })
+
+  socket.on("onlineUsers",(payload)=>{
+    setOnlineUsers(payload);
+  });
 
   const callRejected = () => {
     socket.emit("callRejected",selectedElement)
@@ -40,6 +44,7 @@ const ContactArea = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCallModal, setShowCallModal] = useState(false);
   const [selectedElement, setSelectedElement] = useState("");
+  const [onlineUsers, setOnlineUsers] = useState<string[]>([]);
 
   const { mutate, isSuccess } = useMutation({
     mutationFn: (data: string) =>
@@ -60,6 +65,10 @@ const ContactArea = () => {
     }
   }, [isSuccess]);
 
+  useEffect(()=>{
+    socket.emit("onlineUsers")
+  },[])
+  
   return (
     <div className="ContactArea">
       <h3>Kontakty</h3>
@@ -70,10 +79,12 @@ const ContactArea = () => {
           { key: "id", name: "ID", width: "100px" },
           { key: "name", name: "Imie", width: "auto" },
           { key: "lastName", name: "Nazwisko", width: "auto" },
+          { key: "status", name: "Status", width: "10%" },
           { key: "buttons", width: "10%" },
         ]}
         data={data?.map((el: any) => ({
           ...el,
+          status: onlineUsers?.includes(el?.uuid)?"ONLINE":"OFFLINE",
           buttons: (
             <div style={{ display: "flex", justifyContent: "center" }}>
               <Tooltip arrow placement="top" title="Zadzwoń">

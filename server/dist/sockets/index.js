@@ -19,13 +19,10 @@ const socketInit = (app) => {
     //     console.log("Connected users:", connectedUsers);
     // }, 5000)
     io.on('connection', (socket) => {
-        console.log('socket Id:', socket.id);
-        socket.on("message", (message) => {
-            console.log(":", message);
-            socket.emit("message", "hello user");
-        });
         socket.on("connectedUser", (userData) => {
             connectedUsers = (0, lodash_1.uniqBy)([...connectedUsers.filter(el => el.userUuid !== userData.uuid), { userUuid: userData.uuid, socketId: socket.id, name: userData.name, lastName: userData.lastName }], "userUuid");
+            console.log("Users connected ", connectedUsers);
+            io.emit("onlineUsers", connectedUsers.flatMap(el => el.userUuid));
         });
         socket.on("call", (payload) => {
             const roomId = (0, crypto_1.randomUUID)();
@@ -58,7 +55,15 @@ const socketInit = (app) => {
             let roomUsers = await io.in(payload).fetchSockets();
             io.to(payload).emit("clientInRoom", roomUsers.length);
         });
+        socket.on("initCall", (payload) => {
+            io.to(payload.roomId).emit("initCall", payload);
+        });
+        socket.on("onlineUsers", () => {
+            socket.emit("onlineUsers", connectedUsers.flatMap(el => el.userUuid));
+        });
         socket.on("disconnect", async () => {
+            connectedUsers = [...connectedUsers.filter(el => el.socketId !== socket.id)];
+            io.emit("onlineUsers", connectedUsers.flatMap(el => el.userUuid));
             console.log('Disconnect', socket.rooms);
         });
     });

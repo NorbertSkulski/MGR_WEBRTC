@@ -4,66 +4,18 @@ import "./VideoCallArea.scss";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
-import { uniqBy } from "lodash";
-
-
 
 const VideoCallArea = () => {
   const param = useParams();
 
-  // const [peers, setPeers] = useState<any[]>([]);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // const socket: Socket = useSelector(
-  //   (state: any) => state?.SocketReducer?.socket
-  // );
-  // const userData = useSelector((state: any) => state?.AuthReducer?.user);
 
-  // const configuration: object = {
-  //   iceServers: [
-  //     { urls: "stun:stun.l.google.com:19302" },
-  //     { urls: "stun:stun.l.google.com:5349" },
-  //     { urls: "stun:stun1.l.google.com:3478" },
-  //     { urls: "stun:stun1.l.google.com:5349" },
-  //     { urls: "stun:stun2.l.google.com:19302" },
-  //     { urls: "stun:stun2.l.google.com:5349" },
-  //     { urls: "stun:stun3.l.google.com:3478" },
-  //     { urls: "stun:stun3.l.google.com:5349" },
-  //     { urls: "stun:stun4.l.google.com:19302" },
-  //     { urls: "stun:stun4.l.google.com:5349" },
-  //   ],
-  // };
-  // let peer: any = null;
-
-  // socket.on("getPeerFromOther", (payload: SendPeer) => {
-  //   if (payload.userUuid !== userData.uuid) {
-  //     setPeers((element: any) =>
-  //       uniqBy([...element, payload.peerOffer], "sdp")
-  //     );
-  //   }
-  // });
-
-  // const connect = async () => {
-  //   if (!peer) {
-  //     peer = new RTCPeerConnection(configuration);
-  //   }
-  //   const peerOffer = await peer.createOffer();
-  //   await peer.setLocalDescription(new RTCSessionDescription(peerOffer));
-  //   socket.emit("sendPeerToOther", {
-  //     roomId: param.roomId,
-  //     peerOffer: peerOffer,
-  //     userUuid: userData.uuid,
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   connect();
-  // }, []);
-
-  // console.log("peers: ", peer?.signalingState);
+  const [stream, setStream] = useState<MediaProvider|any>(null)
 
   const socket: Socket = useSelector(
-      (state: any) => state?.SocketReducer?.socket
-    );
+    (state: any) => state?.SocketReducer?.socket
+  );
 
   socket.emit("clientInRoom", param.roomId);
 
@@ -71,16 +23,46 @@ const VideoCallArea = () => {
 
   socket.on("clientInRoom", (payload) => {
     console.log("clients: ", payload);
-    if(payload > 0)
-      setClientsAmount(payload-1);
+    if (payload > 0) setClientsAmount(payload - 1);
   });
+
+  const getStream = async () => {
+    return await navigator.mediaDevices.getUserMedia({
+      video: true,
+      audio: true,
+    });
+  };
+
+  const initStream = async () => {
+    setStream(await getStream());
+  };
+
+  useEffect(() => {
+    initStream();
+  }, []);
+
+  const setLocalCamera = () => {
+    if (!videoRef.current) {
+      return;
+    }
+    videoRef.current.srcObject = stream || null;
+    videoRef.current.play();
+    videoRef.current.muted = true;
+  };
+
+  useEffect(() => {
+    if(!stream) return;
+    setLocalCamera();
+  }, [stream]);
 
   return (
     <div className="VideoCallArea">
-      {Array.from(Array(clientsAmount).keys()).map((_, idx) => (
-        <CameraComponent key={idx} />
-      ))}
-      {/* <CameraComponent selfCamera={true} /> */}
+      {stream?Array.from(Array(clientsAmount).keys()).map((_, idx) => (
+        <CameraComponent key={idx} stream={stream} />
+      )):null}
+       <div className="CameraComponent">
+      <video ref={videoRef}></video>
+    </div>
     </div>
   );
 };

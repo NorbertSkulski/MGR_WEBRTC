@@ -5,8 +5,7 @@ import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 
 type CameraComponentType = {
-  externalPeer?: RTCSessionDescriptionInit;
-  internalPeer?: RTCPeerConnection;
+  stream: MediaProvider | any;
   selfCamera?: boolean;
 };
 
@@ -23,7 +22,7 @@ type SendPeerOffer = {
 };
 
 const CameraComponent = (props: CameraComponentType) => {
-  const { selfCamera } = props;
+  const { stream } = props;
   const param = useParams();
   const { roomId } = param;
 
@@ -33,16 +32,23 @@ const CameraComponent = (props: CameraComponentType) => {
   const userData = useSelector((state: any) => state?.AuthReducer?.user);
 
   const videoRef = useRef<HTMLVideoElement>(null);
-  const streamRef = useRef<MediaProvider | any>(null);
   const [peer, setPeer] = useState<any>(null);
+  const [streamIsReady, setStreamIsReady] = useState(false);
+
+  const setRemoteDescr = async (payload: RTCSessionDescriptionInit) => {
+    try {
+      await peer.setRemoteDescription(new RTCSessionDescription(payload));
+    } catch (err) {
+      console.error("setRemoteDescriptionError", err);
+      setRemoteDescr(payload);
+    }
+  };
 
   const createConnection = async () => {
-    if (peer && !selfCamera) {
+    if (peer && stream) {
       socket.on("getPeerFromOther", async (payload: SendPeerOffer) => {
         if (payload.userUuid !== userData.uuid && payload.roomId === roomId) {
-          await peer.setRemoteDescription(
-            new RTCSessionDescription(payload.peerOffer)
-          );
+          await setRemoteDescr(payload.peerOffer);
           const answer = await peer.createAnswer();
           await peer.setLocalDescription(new RTCSessionDescription(answer));
           socket.emit("sendAnswerToOther", {
@@ -55,42 +61,36 @@ const CameraComponent = (props: CameraComponentType) => {
 
       socket.on("getAnswerFromOther", async (payload: SendPeerAnswer) => {
         if (payload.userUuid !== userData.uuid && payload.roomId === roomId) {
-          await peer.setRemoteDescription(
-            new RTCSessionDescription(payload.answer)
-          );
+          await setRemoteDescr(payload.answer);
         }
       });
 
-      peer.addEventListener("track", async (event: any) => {
+      peer.ontrack = async (event: any) => {
         const [remoteStream] = event.streams;
-        if (!videoRef.current) {
+        const video = videoRef.current;
+        if (!video) {
           return;
         }
-        videoRef.current.srcObject = remoteStream;
-        const timeout = setTimeout(() => {
-          if (videoRef.current) videoRef.current.play();
-          clearTimeout(timeout);
-        }, 500);
-      });
+        const isPlaying = !video.paused;
+        if (isPlaying) {
+          return;
+        }
+        video.srcObject = remoteStream;
+        video.play();
+      };
 
-      streamRef.current.getTracks().forEach((track: any) => {
-        peer.addTrack(track, streamRef.current);
+      stream.getTracks().forEach((track: any) => {
+        peer.addTrack(track, stream);
       });
     }
   };
 
   useEffect(() => {
     createConnection();
-  }, [peer]);
-
-  const getStream = async () => {
-    return await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
-  };
+  }, [stream?.id, peer]);
 
   const initCall = async () => {
+    console.log("initcall");
     const peerOffer = await peer.createOffer();
     await peer.setLocalDescription(new RTCSessionDescription(peerOffer));
     socket.emit("sendPeerToOther", {
@@ -101,51 +101,49 @@ const CameraComponent = (props: CameraComponentType) => {
   };
 
   const isStreamActivated = () => {
-    if (selfCamera) {
-      return;
-    }
-    if (Boolean(streamRef.current)) {
+    if (Boolean(stream) && Boolean(peer)) {
       const timeout = setTimeout(() => {
-        initCall();
+        socket.emit("initCall", { userUuid: userData.uuid, roomId: roomId });
         clearTimeout(timeout);
       }, 500);
     }
   };
 
-  useEffect(() => {
+  const isStreamReady = ()=>{
+    if (Boolean(stream) && Boolean(peer) && streamIsReady){
+      initCall();
+    }
+  }
+
+  useEffect(()=>{isStreamReady()},[stream?.uuid,peer,streamIsReady])
+
+  useEffect(()=>{
     isStreamActivated();
-  }, [streamRef.current]);
+  },[streamIsReady, stream?.id, peer])
+
+  socket.on("initCall", (payload) => {
+    if (payload.userUuid !== userData.uuid) {
+      setStreamIsReady(true);
+    }
+  });
+
 
   const initialize = async () => {
-    streamRef.current = await getStream();
-    if (!streamRef.current) {
-      return;
-    }
-    if (!videoRef.current) {
-      return;
-    }
-    if (selfCamera) {
-      videoRef.current.srcObject = streamRef.current || null;
-      videoRef.current.play();
-      videoRef.current.muted = true;
-      return;
-    } else {
-      const configuration: object = {
-        iceServers: [
-          { urls: "stun:stun.l.google.com:19302" },
-          { urls: "stun:stun.l.google.com:5349" },
-          { urls: "stun:stun1.l.google.com:3478" },
-          { urls: "stun:stun1.l.google.com:5349" },
-          { urls: "stun:stun2.l.google.com:19302" },
-          { urls: "stun:stun2.l.google.com:5349" },
-          { urls: "stun:stun3.l.google.com:3478" },
-          { urls: "stun:stun3.l.google.com:5349" },
-          { urls: "stun:stun4.l.google.com:19302" },
-          { urls: "stun:stun4.l.google.com:5349" },
-        ],
-      };
-      setPeer(new RTCPeerConnection(configuration));
-    }
+    const configuration: object = {
+      iceServers: [
+        { urls: "stun:stun.l.google.com:19302" },
+        { urls: "stun:stun.l.google.com:5349" },
+        { urls: "stun:stun1.l.google.com:3478" },
+        { urls: "stun:stun1.l.google.com:5349" },
+        { urls: "stun:stun2.l.google.com:19302" },
+        { urls: "stun:stun2.l.google.com:5349" },
+        { urls: "stun:stun3.l.google.com:3478" },
+        { urls: "stun:stun3.l.google.com:5349" },
+        { urls: "stun:stun4.l.google.com:19302" },
+        { urls: "stun:stun4.l.google.com:5349" },
+      ],
+    };
+    setPeer(new RTCPeerConnection(configuration));
   };
 
   useEffect(() => {
@@ -156,36 +154,18 @@ const CameraComponent = (props: CameraComponentType) => {
   }, []);
 
   const stopStream = () => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach((track: any) => {
+    if (stream) {
+      stream.getTracks().forEach((track: any) => {
         if (track.readyState == "live") {
           track.stop();
         }
       });
     }
   };
-
+  console.log("strim", stream?.id, peer);
   return (
     <div className="CameraComponent">
       <video ref={videoRef}></video>
-      <button onClick={stopStream}>stop</button>
-      {!selfCamera ? (
-        <button
-          onClick={async () => {
-            const peerOffer = await peer.createOffer();
-            await peer.setLocalDescription(
-              new RTCSessionDescription(peerOffer)
-            );
-            socket.emit("sendPeerToOther", {
-              roomId: param.roomId,
-              peerOffer: peerOffer,
-              userUuid: userData.uuid,
-            });
-          }}
-        >
-          test
-        </button>
-      ) : null}
     </div>
   );
 };

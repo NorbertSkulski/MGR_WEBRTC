@@ -16,12 +16,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { setAuth } from "../../redux/reducers/AuthReducer/AuthReducer";
 // @ts-ignore: Unreachable code error
 import {NotificationManager} from 'react-notifications';
+import { Socket } from "socket.io-client";
+import { setSocket } from "../../redux/reducers/SocketReducer/SocketReducer";
 
 const MenuList = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const unAuth = () => dispatch(setAuth(false)); 
+  const unAuth = () => dispatch(setAuth(false));
+  const socket: Socket = useSelector(
+  
+    (state: any) => state?.SocketReducer?.socket
+    );
 
   const userData = useSelector((state:any)=> state?.AuthReducer?.user);
   // zrobić hook 
@@ -65,12 +71,16 @@ const MenuList = () => {
     },300);    
   }
 
+  const setSocketReducer = (socket: Socket|null) => dispatch(setSocket(socket));
+
+
   const logOut = async () => {
     const payload = await GlobalFetch({method:"POST", url:"/auth/logout"})
     if(!payload || payload.status >=300){
       return;
     }
-
+    socket.disconnect();
+    setSocketReducer(null);
     unAuth();
     NotificationManager.success("Wylogowano !")
   }
