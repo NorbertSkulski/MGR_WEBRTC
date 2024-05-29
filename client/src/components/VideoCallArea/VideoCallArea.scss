@@ -13,4 +13,17 @@
 
     grid-template-rows: repeat(auto-fit, minmax(15rem,1fr));
     grid-template-columns: repeat(auto-fit, minmax(20rem,1fr));
+
+    .ButtonVideoArea{
+        position: absolute;
+        bottom: 3rem;
+        left: 50%;
+        translate: -50%;
+        height: 3rem;
+        background: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        border-radius: 20px;
+    }
 }
