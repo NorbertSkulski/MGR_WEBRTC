@@ -76,7 +76,7 @@ const VideoCallArea = () => {
       <div className="ButtonVideoArea">
       <IconButton         
           onClick={() => {
-            nav("/dashboard/contact");
+            setMicOff(state=>!state);
           }}
           size="small"
         >
