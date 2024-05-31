@@ -2,7 +2,7 @@
   "name": "webrtc_server",
   "version": "1.0.0",
   "description": "webrtc_server",
-  "main": "src/index.js",
+  "main": "src/index.mjs",
   "scripts": {
     "updateDb":"npx prisma db push",
     "migrate": "npx prisma migrate dev --name migrate",

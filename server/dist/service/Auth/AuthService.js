@@ -1,26 +1,23 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = void 0;
-const JWT_1 = require("../../utils/JWT/JWT");
-const Datadase_1 = require("../../database/Datadase");
-const Errors_1 = require("../../utils/Errors/Errors");
-const bcrypt_1 = require("bcrypt");
-const lodash_1 = require("lodash");
+import { generateToken } from "../../utils/JWT/JWT";
+import { prisma } from "../../database/Datadase";
+import { loginError } from "../../utils/Errors/Errors";
+import { compare } from "bcrypt";
+import { cloneDeep } from "lodash";
 const login = async (atuhCredentials) => {
     try {
-        const user = await Datadase_1.prisma.user.findFirst({ where: { login: atuhCredentials.login }, include: { friendOf: true, friends: true, friendRequestFrom: true, friendRequestTo: true }, });
+        const user = await prisma.user.findFirst({ where: { login: atuhCredentials.login }, include: { friendOf: true, friends: true, friendRequestFrom: true, friendRequestTo: true }, });
         if (!user)
-            throw Errors_1.loginError;
-        const match = await (0, bcrypt_1.compare)(atuhCredentials.password, user.password);
+            throw loginError;
+        const match = await compare(atuhCredentials.password, user.password);
         if (!match)
-            throw Errors_1.loginError;
-        const userData = (0, lodash_1.cloneDeep)(user);
+            throw loginError;
+        const userData = cloneDeep(user);
         delete userData.password;
-        return { token: (0, JWT_1.generateToken)(user.login), userData: userData };
+        return { token: generateToken(user.login), userData: userData };
     }
     catch (err) {
         console.error(err);
-        throw Errors_1.loginError;
+        throw loginError;
     }
 };
-exports.login = login;
+export { login };
