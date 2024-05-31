@@ -9,7 +9,7 @@
     "build": "npx tsc",
     "start": "node dist/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
-    "deploy":"concurrently \"npx tsc\" \"npx prisma generate\" \"npx prisma db push\" \"npm run start\""
+    "deploy":"concurrently \"npx tsc\" \"npx prisma db push\" \"npm run start\""
   },
   "author": "Norbert Skulski",
   "license": "ISC",
