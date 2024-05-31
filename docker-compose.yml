@@ -1,0 +1,52 @@
+version: '3.9'
+services:
+    client:
+        image: client
+        build: ./client
+        restart: on-failure
+        container_name: client
+        networks:
+            projectNet:
+                ipv4_address: 10.64.0.2
+        ports:
+            - '80:80'
+            - '443:443'
+        depends_on:
+            - server
+    
+    server:
+        image: server
+        build: ./server
+        restart: on-failure
+        container_name: server
+        networks:
+            projectNet:
+                ipv4_address: 10.64.0.3
+        expose:
+            - '2300'
+        volumes:
+            - /project/files:/files               
+        depends_on:
+            - postgres
+
+    postgres:
+        image: postgres:latest
+        expose:
+            - '5432'
+        volumes:
+            - /project/database/postgres:/var/lib/postgresql/data
+        environment:
+            - POSTGRES_PASSWORD=admin
+            - POSTGRES_USER=postgres
+            - POSTGRES_DB=WEBrtc      
+        restart: on-failure
+        container_name: postgres
+        networks:
+            projectNet:
+                ipv4_address: 10.64.0.4
+networks:
+    projectNet:
+        name: projectNet
+        ipam:
+            config:
+                - subnet: '10.64.0.0/28'

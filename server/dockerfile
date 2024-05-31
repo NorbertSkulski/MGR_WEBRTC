@@ -1,0 +1,17 @@
+FROM node:20
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 2300
+
+RUN npm run build
+
+RUN npm run updateDb
+
+CMD ["npm", "run", "start"]

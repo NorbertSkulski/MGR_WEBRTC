@@ -1,0 +1,26 @@
+# base image
+FROM node:20
+
+ENV NGINX_CONF_DIR=/etc/nginx
+RUN apt-get update && apt-get install nginx -y
+RUN rm /etc/nginx/sites-available/default
+RUN rm /etc/nginx/sites-enabled/default
+WORKDIR /app
+COPY package.json /app
+COPY . .
+RUN npm install --unsafe-perm
+RUN npm run build
+EXPOSE 80 443
+RUN mkdir /var/www/project
+RUN cp -r /app/build/* /var/www/project
+WORKDIR /etc/nginx
+########################STRONY######################################################
+COPY ./nginx/project.conf ${NGINX_CONF_DIR}/sites-available/project.conf
+COPY ./nginx/ssl.conf ${NGINX_CONF_DIR}/ssl.conf
+COPY ./nginx/nginx.conf ${NGINX_CONF_DIR}/nginx.conf
+COPY ./nginx/proxy_params.conf ${NGINX_CONF_DIR}/proxy_params
+COPY ./nginx/ssl /etc/nginx/ssl
+####################################################################################
+RUN ln -s /etc/nginx/sites-available/project.conf /etc/nginx/sites-enabled/
+# start app
+CMD ["nginx", "-g", "daemon off;"]
