@@ -7,7 +7,7 @@ const lodash_1 = require("lodash");
 const crypto_1 = require("crypto");
 const socketInit = (app) => {
     const server = (0, http_1.createServer)(app);
-    const io = new socket_io_1.Server(server, { path: "/socket", cors: { origin: process.env.origin } });
+    const io = new socket_io_1.Server(server, { path: "/api/socket", cors: { origin: process.env.origin } });
     let connectedUsers = [];
     const getUserSocketId = (userUUid) => {
         return connectedUsers.find(user => user.userUuid === userUUid)?.socketId || "";
