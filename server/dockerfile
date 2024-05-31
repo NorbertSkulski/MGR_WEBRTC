@@ -8,9 +8,9 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
-
 RUN npm run updateDb
+
+RUN npm run build
 
 EXPOSE 2300
 
