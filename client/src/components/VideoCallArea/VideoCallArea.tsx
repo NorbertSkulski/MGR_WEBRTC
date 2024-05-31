@@ -14,6 +14,7 @@ const VideoCallArea = () => {
   const nav = useNavigate();
 
   const [stream, setStream] = useState<MediaProvider | any>(null);
+  const [micOff,setMicOff] = useState(false);
 
   const socket: Socket = useSelector(
     (state: any) => state?.SocketReducer?.socket
@@ -57,6 +58,11 @@ const VideoCallArea = () => {
     setLocalCamera();
   }, [stream]);
 
+  useEffect(()=>{
+    if (!stream) return;
+    stream.getAudioTracks()[0].enabled=!micOff;
+  },[micOff])
+
   return (
     <div className="VideoCallArea">
       {stream
@@ -68,6 +74,15 @@ const VideoCallArea = () => {
         <video ref={videoRef}></video>
       </div>
       <div className="ButtonVideoArea">
+      <IconButton         
+          onClick={() => {
+            nav("/dashboard/contact");
+          }}
+          size="small"
+        >
+          {!micOff?<Icon style={{ color: "green" }}>mic_off</Icon>:
+          <Icon style={{ color: "red" }}>mic</Icon>}
+        </IconButton>
         <IconButton         
           onClick={() => {
             nav("/dashboard/contact");
