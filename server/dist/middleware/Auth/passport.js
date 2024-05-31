@@ -1,12 +1,18 @@
-import passport from 'passport';
-import { Strategy as JwtStrategy } from 'passport-jwt';
-import { get } from 'lodash';
-import { permissionError } from '../../utils/Errors/Errors';
-import { Permission } from '@prisma/client';
-import { checkIsUser } from '../../utils/Types/CheckType';
-import { prisma } from '../../database/Datadase';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DELETE = exports.CREATE = exports.UPDATE = exports.READ = exports.Auth = void 0;
+const passport_1 = __importDefault(require("passport"));
+const passport_jwt_1 = require("passport-jwt");
+const lodash_1 = require("lodash");
+const Errors_1 = require("../../utils/Errors/Errors");
+const client_1 = require("@prisma/client");
+const CheckType_1 = require("../../utils/Types/CheckType");
+const Datadase_1 = require("../../database/Datadase");
 const customExtractor = (req) => {
-    const token = get(req, 'signedCookies.Authorization', null);
+    const token = (0, lodash_1.get)(req, 'signedCookies.Authorization', null);
     if (token && token.startsWith(`${process.env.TOKEN_PREFIX}`))
         return token.replace(`${process.env.TOKEN_PREFIX}`, "").trim();
     return null;
@@ -17,61 +23,66 @@ const options = {
     secretOrKey: process.env.SECRET_JWT,
     algorithms: [`${process.env.JWT_ALGORITHM}`]
 };
-passport.use(new JwtStrategy(options, async (req, payload, done) => {
+passport_1.default.use(new passport_jwt_1.Strategy(options, async (req, payload, done) => {
     const { login } = payload;
-    const user = await prisma.user.findFirst({ where: { login } });
+    const user = await Datadase_1.prisma.user.findFirst({ where: { login } });
     if (!user) {
         done(null, false);
         return;
     }
     done(null, user);
 }));
-passport.serializeUser((user, cb) => {
+passport_1.default.serializeUser((user, cb) => {
     process.nextTick(() => {
         cb(null, { id: user.uuid });
     });
 });
-passport.deserializeUser((user, cb) => {
+passport_1.default.deserializeUser((user, cb) => {
     process.nextTick(() => {
         cb(null, user);
     });
 });
-export const Auth = (req, res, next) => passport.authenticate('jwt', { session: false })(req, res, next);
-export const READ = (req, res, next) => {
-    if (checkIsUser(req.user)) {
+const Auth = (req, res, next) => passport_1.default.authenticate('jwt', { session: false })(req, res, next);
+exports.Auth = Auth;
+const READ = (req, res, next) => {
+    if ((0, CheckType_1.checkIsUser)(req.user)) {
         if (req.user.admin) {
             return next();
         }
         //Dopisac rozpoznawanie praw i dobobic update idt...
-        if (req.user.permissions.includes(Permission.READ))
+        if (req.user.permissions.includes(client_1.Permission.READ))
             return next();
     }
-    next(permissionError);
+    next(Errors_1.permissionError);
 };
-export const UPDATE = (req, res, next) => {
-    if (checkIsUser(req.user)) {
+exports.READ = READ;
+const UPDATE = (req, res, next) => {
+    if ((0, CheckType_1.checkIsUser)(req.user)) {
         if (req.user.admin)
             return next();
-        if (req.user.permissions.includes(Permission.UPDATE))
+        if (req.user.permissions.includes(client_1.Permission.UPDATE))
             return next();
     }
-    next(permissionError);
+    next(Errors_1.permissionError);
 };
-export const CREATE = (req, res, next) => {
-    if (checkIsUser(req.user)) {
+exports.UPDATE = UPDATE;
+const CREATE = (req, res, next) => {
+    if ((0, CheckType_1.checkIsUser)(req.user)) {
         if (req.user.admin)
             return next();
-        if (req.user.permissions.includes(Permission.CREATE))
+        if (req.user.permissions.includes(client_1.Permission.CREATE))
             return next();
     }
-    next(permissionError);
+    next(Errors_1.permissionError);
 };
-export const DELETE = (req, res, next) => {
-    if (checkIsUser(req.user)) {
+exports.CREATE = CREATE;
+const DELETE = (req, res, next) => {
+    if ((0, CheckType_1.checkIsUser)(req.user)) {
         if (req.user.admin)
             return next();
-        if (req.user.permissions.includes(Permission.DELETE))
+        if (req.user.permissions.includes(client_1.Permission.DELETE))
             return next();
     }
-    next(permissionError);
+    next(Errors_1.permissionError);
 };
+exports.DELETE = DELETE;

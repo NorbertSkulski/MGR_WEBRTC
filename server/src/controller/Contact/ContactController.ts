@@ -15,7 +15,7 @@ router.get('/contactList', Auth, READ, async (req: Request, res: Response, next:
         };
 
         res.send(await contactList(req.user));
-    } catch (err) {
+    } catch (err:any) {
         next(requerstError(err));
     }
 });
@@ -26,7 +26,7 @@ router.delete("/delete/:uuid", Auth, READ, async (req: Request, res: Response, n
             throw "Is not a user!";
         };
         res.send(await deleteContact(req.user, req?.params?.uuid));
-    } catch (err) {
+    } catch (err:any) {
         next(requerstError(err));
     }
 })

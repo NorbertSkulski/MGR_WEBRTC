@@ -41,7 +41,7 @@ const login = async (atuhCredentials: Atuh_Credentials) => {
         delete userData.password;
 
         return { token: generateToken(user.login), userData: userData };
-    } catch (err) {
+    } catch (err:any) {
         console.error(err);
         throw loginError;
     }

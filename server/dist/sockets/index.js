@@ -1,10 +1,13 @@
-import { Server } from "socket.io";
-import { createServer } from "http";
-import { uniqBy } from "lodash";
-import { randomUUID } from "crypto";
-export const socketInit = (app) => {
-    const server = createServer(app);
-    const io = new Server(server, { path: "/socket", cors: { origin: process.env.origin?.split(',') } });
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.socketInit = void 0;
+const socket_io_1 = require("socket.io");
+const http_1 = require("http");
+const lodash_1 = require("lodash");
+const crypto_1 = require("crypto");
+const socketInit = (app) => {
+    const server = (0, http_1.createServer)(app);
+    const io = new socket_io_1.Server(server, { path: "/socket", cors: { origin: process.env.origin?.split(',') } });
     let connectedUsers = [];
     const getUserSocketId = (userUUid) => {
         return connectedUsers.find(user => user.userUuid === userUUid)?.socketId || "";
@@ -17,12 +20,12 @@ export const socketInit = (app) => {
     // }, 5000)
     io.on('connection', (socket) => {
         socket.on("connectedUser", (userData) => {
-            connectedUsers = uniqBy([...connectedUsers.filter(el => el.userUuid !== userData.uuid), { userUuid: userData.uuid, socketId: socket.id, name: userData.name, lastName: userData.lastName }], "userUuid");
+            connectedUsers = (0, lodash_1.uniqBy)([...connectedUsers.filter(el => el.userUuid !== userData.uuid), { userUuid: userData.uuid, socketId: socket.id, name: userData.name, lastName: userData.lastName }], "userUuid");
             console.log("Users connected ", connectedUsers);
             io.emit("onlineUsers", connectedUsers.flatMap(el => el.userUuid));
         });
         socket.on("call", (payload) => {
-            const roomId = randomUUID();
+            const roomId = (0, crypto_1.randomUUID)();
             socket.emit("call", { roomId: roomId, callerId: payload.fromUser, userFullName: getUserFullName(payload.toUser) });
             socket.to(getUserSocketId(payload.toUser)).emit("call", { roomId: roomId, callerId: payload.fromUser, userFullName: getUserFullName(payload.fromUser) });
             socket.join(roomId);
@@ -66,3 +69,4 @@ export const socketInit = (app) => {
     });
     return server;
 };
+exports.socketInit = socketInit;

@@ -1,55 +1,57 @@
-import { Router } from "express";
-import { registration, friendRequest, friendRequestsLists, acceptFriendRequest, deleteFriendRequest } from "../../service/User/UserService";
-import { Auth, READ } from "../../middleware/Auth/passport";
-import { checkIsUser } from "../../utils/Types/CheckType";
-import { requerstError } from "../../utils/Errors/Errors";
-const router = Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const UserService_1 = require("../../service/User/UserService");
+const passport_1 = require("../../middleware/Auth/passport");
+const CheckType_1 = require("../../utils/Types/CheckType");
+const Errors_1 = require("../../utils/Errors/Errors");
+const router = (0, express_1.Router)();
 router.post('/registration', async (req, res, next) => {
     try {
-        res.send(await registration(req.body));
+        res.send(await (0, UserService_1.registration)(req.body));
     }
     catch (err) {
-        next(requerstError(err));
+        next((0, Errors_1.requerstError)(err));
     }
 });
-router.patch('/friendRequest', Auth, READ, async (req, res, next) => {
+router.patch('/friendRequest', passport_1.Auth, passport_1.READ, async (req, res, next) => {
     try {
-        if (!checkIsUser(req?.user)) {
+        if (!(0, CheckType_1.checkIsUser)(req?.user)) {
             throw "Is not a user!";
         }
         ;
-        res.send(await friendRequest({ fromUserUuid: req.user.uuid, toUserUuid: req.body.id }));
+        res.send(await (0, UserService_1.friendRequest)({ fromUserUuid: req.user.uuid, toUserUuid: req.body.id }));
     }
     catch (err) {
-        next(requerstError(err));
+        next((0, Errors_1.requerstError)(err));
     }
 });
-router.get("/friendRequestsList", Auth, READ, async (req, res, next) => {
+router.get("/friendRequestsList", passport_1.Auth, passport_1.READ, async (req, res, next) => {
     try {
-        if (!checkIsUser(req?.user)) {
+        if (!(0, CheckType_1.checkIsUser)(req?.user)) {
             throw "Is not a user!";
         }
         ;
-        res.send(await friendRequestsLists({ logedUser: req.user }));
+        res.send(await (0, UserService_1.friendRequestsLists)({ logedUser: req.user }));
     }
     catch (err) {
-        next(requerstError(err));
+        next((0, Errors_1.requerstError)(err));
     }
 });
-router.patch('/acceptFriendRequest', Auth, READ, async (req, res, next) => {
+router.patch('/acceptFriendRequest', passport_1.Auth, passport_1.READ, async (req, res, next) => {
     try {
-        res.send(await acceptFriendRequest({ body: req.body }));
+        res.send(await (0, UserService_1.acceptFriendRequest)({ body: req.body }));
     }
     catch (err) {
-        next(requerstError(err));
+        next((0, Errors_1.requerstError)(err));
     }
 });
-router.delete('/deleteFriendRequest/:fromUserUuid/:toUserUuid', Auth, READ, async (req, res, next) => {
+router.delete('/deleteFriendRequest/:fromUserUuid/:toUserUuid', passport_1.Auth, passport_1.READ, async (req, res, next) => {
     try {
-        res.send(await deleteFriendRequest(req.params.fromUserUuid, req.params.toUserUuid));
+        res.send(await (0, UserService_1.deleteFriendRequest)(req.params.fromUserUuid, req.params.toUserUuid));
     }
     catch (err) {
-        next(requerstError(err));
+        next((0, Errors_1.requerstError)(err));
     }
 });
-export default router;
+exports.default = router;

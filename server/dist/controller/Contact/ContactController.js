@@ -1,31 +1,33 @@
-import { Router } from "express";
-import { Auth, READ } from "../../middleware/Auth/passport";
-import { checkIsUser } from "../../utils/Types/CheckType";
-import { requerstError } from "../../utils/Errors/Errors";
-import { contactList, deleteContact } from "../../service/Friend/FriendService";
-const router = Router();
-router.get('/contactList', Auth, READ, async (req, res, next) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const passport_1 = require("../../middleware/Auth/passport");
+const CheckType_1 = require("../../utils/Types/CheckType");
+const Errors_1 = require("../../utils/Errors/Errors");
+const FriendService_1 = require("../../service/Friend/FriendService");
+const router = (0, express_1.Router)();
+router.get('/contactList', passport_1.Auth, passport_1.READ, async (req, res, next) => {
     try {
-        if (!checkIsUser(req?.user)) {
+        if (!(0, CheckType_1.checkIsUser)(req?.user)) {
             throw "Is not a user!";
         }
         ;
-        res.send(await contactList(req.user));
+        res.send(await (0, FriendService_1.contactList)(req.user));
     }
     catch (err) {
-        next(requerstError(err));
+        next((0, Errors_1.requerstError)(err));
     }
 });
-router.delete("/delete/:uuid", Auth, READ, async (req, res, next) => {
+router.delete("/delete/:uuid", passport_1.Auth, passport_1.READ, async (req, res, next) => {
     try {
-        if (!checkIsUser(req?.user)) {
+        if (!(0, CheckType_1.checkIsUser)(req?.user)) {
             throw "Is not a user!";
         }
         ;
-        res.send(await deleteContact(req.user, req?.params?.uuid));
+        res.send(await (0, FriendService_1.deleteContact)(req.user, req?.params?.uuid));
     }
     catch (err) {
-        next(requerstError(err));
+        next((0, Errors_1.requerstError)(err));
     }
 });
-export default router;
+exports.default = router;

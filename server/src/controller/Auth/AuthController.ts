@@ -9,7 +9,7 @@ router.post('/login', async (req: Request, res: Response, next:NextFunction) => 
         const {token, userData} = await login(req.body);
         res.cookie("Authorization",`${token}`,{signed:true,httpOnly:true, secure:true, sameSite:true})
         res.json(userData);
-    } catch (err) {
+    } catch (err:any) {
         next(permissionError);
     }
 });

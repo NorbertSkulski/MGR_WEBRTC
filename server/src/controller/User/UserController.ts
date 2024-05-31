@@ -10,7 +10,7 @@ const router: Router = Router();
 router.post('/registration', async (req: Request, res: Response, next: NextFunction) => {
     try {
         res.send(await registration(req.body));
-    } catch (err) {
+    } catch (err:any) {
         next(requerstError(err));
     }
 });
@@ -23,7 +23,7 @@ router.patch('/friendRequest', Auth, READ, async (req: Request, res: Response, n
         };
 
         res.send(await friendRequest({ fromUserUuid: req.user.uuid, toUserUuid: req.body.id }));
-    } catch (err) {
+    } catch (err:any) {
         next(requerstError(err));
     }
 });
@@ -36,7 +36,7 @@ router.get("/friendRequestsList", Auth, READ, async (req: Request, res: Response
         };
 
         res.send(await friendRequestsLists({logedUser:req.user}));
-    } catch (err) {
+    } catch (err:any) {
         next(requerstError(err));
     }
 });
@@ -44,7 +44,7 @@ router.get("/friendRequestsList", Auth, READ, async (req: Request, res: Response
 router.patch('/acceptFriendRequest',Auth, READ, async (req: Request, res: Response, next: NextFunction) => {
     try {    
         res.send(await acceptFriendRequest({body:req.body}));
-    } catch (err) {
+    } catch (err:any) {
         next(requerstError(err));
     }
 })
@@ -52,7 +52,7 @@ router.patch('/acceptFriendRequest',Auth, READ, async (req: Request, res: Respon
 router.delete('/deleteFriendRequest/:fromUserUuid/:toUserUuid',Auth, READ, async (req: Request, res: Response, next: NextFunction) => {
     try {    
         res.send(await deleteFriendRequest(req.params.fromUserUuid,req.params.toUserUuid));
-    } catch (err) {
+    } catch (err:any) {
         next(requerstError(err));
     }
 })

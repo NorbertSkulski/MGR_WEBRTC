@@ -38,7 +38,7 @@ const CameraComponent = (props: CameraComponentType) => {
   const setRemoteDescr = async (payload: RTCSessionDescriptionInit) => {
     try {
       await peer.setRemoteDescription(new RTCSessionDescription(payload));
-    } catch (err) {
+    } catch (err:any) {
       console.error("setRemoteDescriptionError", err);
       setRemoteDescr(payload);
     }
