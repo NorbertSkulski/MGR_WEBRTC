@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response, Router } from "express";
 import { registration, friendRequest, friendRequestsLists, acceptFriendRequest, deleteFriendRequest } from "../../service/User/UserService";
-import { User } from "@prisma/client";
 
 import { Auth, READ } from "../../middleware/Auth/passport";
 import { checkIsUser } from "../../utils/Types/CheckType";

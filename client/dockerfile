@@ -1,5 +1,5 @@
 # base image
-FROM node:20
+FROM node:18
 
 ENV NGINX_CONF_DIR=/etc/nginx
 RUN apt-get update && apt-get install nginx -y
