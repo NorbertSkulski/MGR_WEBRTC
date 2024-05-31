@@ -30,7 +30,7 @@ export const socketInit = (app: Express) => {
 
 
     const server: HttpServer = createServer(app);
-    const io = new Server(server, { path: "/socket", cors: { origin: process.env.origin } });
+    const io = new Server(server, { path: "/api/socket", cors: { origin: process.env.origin } });
     let connectedUsers: ConnectedUserType[] = []; 
 
     const getUserSocketId = (userUUid: string): string => {

@@ -34,7 +34,7 @@ const Dashboard = (props: Object) => {
   useEffect(() => {
     if (!socketInReducer || socketInReducer.connected===true) {
       const socket = io(String(process.env.REACT_APP_API_SOCKET_URL), {
-        path: "/socket",
+        path: "/api/socket",
       });
       socket.on("connect",()=>{
         socket.emit("connectedUser",userData)
