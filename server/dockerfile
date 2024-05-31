@@ -8,10 +8,10 @@ RUN npm install
 
 COPY . .
 
-EXPOSE 2300
-
 RUN npm run build
 
 RUN npm run updateDb
+
+EXPOSE 2300
 
 CMD ["npm", "run", "start"]
