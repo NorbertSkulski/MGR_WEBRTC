@@ -1,6 +1,6 @@
 import cors from "cors";
 
 export const innerCors = cors({
-    origin: process.env.origin?.split(','),
+    origin: process.env.origin,
     credentials:true
 })
