@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import CameraComponent from "../CameraComponent/CameraComponent";
 import "./VideoCallArea.scss";
 import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
 import { Icon, IconButton } from "@mui/material";
+import { useAppSelector } from "../../hooks/redux/reduxHook";
 
 const VideoCallArea = () => {
   const param = useParams();
@@ -16,7 +16,7 @@ const VideoCallArea = () => {
   const [stream, setStream] = useState<MediaProvider | any>(null);
   const [micOff,setMicOff] = useState(false);
 
-  const socket: Socket = useSelector(
+  const socket: Socket = useAppSelector(
     (state: any) => state?.SocketReducer?.socket
   );
 

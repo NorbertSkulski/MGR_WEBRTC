@@ -18,7 +18,7 @@ export const GlobalFetch = async (config:AxiosRequestConfig) =>{
             NotificationManager.error("Błąd autoryzacji!");
             return err.response;
         }
-        NotificationManager.error(err?.response?.data);
+        NotificationManager.error(err?.response?.data || "Błąd");
         return err?.response;
     } 
 }

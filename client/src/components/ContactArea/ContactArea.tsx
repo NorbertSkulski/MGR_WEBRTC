@@ -9,8 +9,8 @@ import { useEffect, useState } from "react";
 import AppButton from "../Buttons/AppButton/AppButton";
 // @ts-ignore: Unreachable code error
 import { NotificationManager } from "react-notifications";
-import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
+import { useAppSelector } from "../../hooks/redux/reduxHook";
 
 const ContactArea = () => {
   const { data, refetch } = useQuery({
@@ -21,7 +21,7 @@ const ContactArea = () => {
       ),
   });
 
-  const socket: Socket = useSelector(  
+  const socket: Socket = useAppSelector(  
   (state: any) => state?.SocketReducer?.socket
   );
 
@@ -39,7 +39,7 @@ const ContactArea = () => {
     setShowCallModal(false);
   }
 
-  const userData = useSelector((state: any) => state?.AuthReducer?.user);
+  const userData = useAppSelector((state: any) => state?.AuthReducer?.user);
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showCallModal, setShowCallModal] = useState(false);

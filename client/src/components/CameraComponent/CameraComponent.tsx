@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import "./CameraComponent.scss";
 import { useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Socket } from "socket.io-client";
+import { useAppSelector } from "../../hooks/redux/reduxHook";
 
 type CameraComponentType = {
   stream: MediaProvider | any;
@@ -26,10 +26,10 @@ const CameraComponent = (props: CameraComponentType) => {
   const param = useParams();
   const { roomId } = param;
 
-  const socket: Socket = useSelector(
+  const socket: Socket = useAppSelector(
     (state: any) => state?.SocketReducer?.socket
   );
-  const userData = useSelector((state: any) => state?.AuthReducer?.user);
+  const userData = useAppSelector((state: any) => state?.AuthReducer?.user);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const [peer, setPeer] = useState<any>(null);
