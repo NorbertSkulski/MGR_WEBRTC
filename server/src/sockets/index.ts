@@ -4,7 +4,6 @@ import { createServer, Server as HttpServer } from "http";
 import { User } from "@prisma/client";
 import { uniqBy } from "lodash";
 import { randomUUID } from "crypto";
-import { emit } from "process";
 
 type ConnectedUserType = {
     userUuid: string;
@@ -40,11 +39,6 @@ export const socketInit = (app: Express) => {
     const getUserFullName = (userUUid: string): string => {
         return `${connectedUsers.find(user => user.userUuid === userUUid)?.name || ""} ${connectedUsers.find(user => user.userUuid === userUUid)?.lastName || ""}` || ""
     }
-
-
-    // setInterval(() => {
-    //     console.log("Connected users:", connectedUsers);
-    // }, 5000)
 
     io.on('connection', (socket: Socket) => {
        

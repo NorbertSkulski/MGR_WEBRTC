@@ -15,9 +15,6 @@ const socketInit = (app) => {
     const getUserFullName = (userUUid) => {
         return `${connectedUsers.find(user => user.userUuid === userUUid)?.name || ""} ${connectedUsers.find(user => user.userUuid === userUUid)?.lastName || ""}` || "";
     };
-    // setInterval(() => {
-    //     console.log("Connected users:", connectedUsers);
-    // }, 5000)
     io.on('connection', (socket) => {
         socket.on("connectedUser", (userData) => {
             connectedUsers = (0, lodash_1.uniqBy)([...connectedUsers.filter(el => el.userUuid !== userData.uuid), { userUuid: userData.uuid, socketId: socket.id, name: userData.name, lastName: userData.lastName }], "userUuid");
