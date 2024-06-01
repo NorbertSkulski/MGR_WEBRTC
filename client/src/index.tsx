@@ -10,7 +10,7 @@ import axios from "axios";
 
 
 axios.defaults.baseURL= String(process.env.REACT_APP_API_URL);
-// axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true;
 
 
 const root = ReactDOM.createRoot(

@@ -17,6 +17,7 @@ const port = process.env.PORT;
 const path = process.env.INIT_PATH || "/";
 app.use(Cors_1.innerCors);
 app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
 app.use(Session_1.app_session);
 app.use((0, cookie_parser_1.default)(process.env.SECRET_SESSION));
 //Routes
