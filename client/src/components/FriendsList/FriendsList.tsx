@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import "./FriendsList.scss";
 import InvitationElement from "../InvitationElement/InvitationElement";
 import { useQuery } from "@tanstack/react-query";
