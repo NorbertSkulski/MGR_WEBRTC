@@ -15,6 +15,7 @@ const path: string = (process.env.INIT_PATH as string) || "/";
 
 app.use(innerCors)
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(app_session)
 app.use(cookieParser(process.env.SECRET_SESSION));
 //Routes
