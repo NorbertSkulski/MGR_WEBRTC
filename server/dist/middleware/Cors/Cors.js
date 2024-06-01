@@ -7,5 +7,5 @@ exports.innerCors = void 0;
 const cors_1 = __importDefault(require("cors"));
 exports.innerCors = (0, cors_1.default)({
     origin: process.env.origin,
-    credentials: true
+    // credentials:true
 });
