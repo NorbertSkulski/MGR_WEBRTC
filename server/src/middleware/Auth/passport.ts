@@ -30,7 +30,7 @@ passport.use(new JwtStrategy(options, async (req: Request, payload: any, done: F
     const user = await prisma.user.findFirst({ where: { login } });
 
     if (!user) {
-        done(null, false);
+        done(permissionError,false);
         return;
     }
 

@@ -27,7 +27,7 @@ passport_1.default.use(new passport_jwt_1.Strategy(options, async (req, payload,
     const { login } = payload;
     const user = await Datadase_1.prisma.user.findFirst({ where: { login } });
     if (!user) {
-        done(null, false);
+        done(Errors_1.permissionError, false);
         return;
     }
     done(null, user);

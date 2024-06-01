@@ -6,7 +6,6 @@ const bcrypt_1 = require("bcrypt");
 const CheckType_1 = require("../../utils/Types/CheckType");
 const registration = async (user) => {
     return await Datadase_1.prisma.user.create({ data: { ...user, password: (0, bcrypt_1.hashSync)(user.password, 15) } });
-    ;
 };
 exports.registration = registration;
 const friendRequest = async (body) => {

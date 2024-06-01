@@ -17,7 +17,7 @@ type AcceptFriendRequestType = {
 }
 
 const registration = async (user: User): Promise<User> => {
-  return await prisma.user.create({ data: { ...user, password: hashSync(user.password, 15) } });;
+  return await prisma.user.create({ data: { ...user, password: hashSync(user.password, 15) } });
 }
 
 const friendRequest = async (body: FriendRequestType): Promise<FriendRequest> => {
