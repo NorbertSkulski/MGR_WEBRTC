@@ -4,12 +4,10 @@
 generator client {
   provider = "prisma-client-js"
 }
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 model User {
   uuid              String          @id @default(uuid())
   email             String          @unique
@@ -30,7 +28,6 @@ model User {
   friendRequestTo   FriendRequest[] @relation("FriendRequestTo")
   friendRequestFrom FriendRequest[] @relation("FriendRequestFrom")
 }
-
 model UsersToUsers {
   userUuid   String
   friendUuid String
@@ -39,7 +36,6 @@ model UsersToUsers {
 
   @@id([userUuid, friendUuid])
 }
-
 model FriendRequest {
   uuid      String   @unique @default(uuid())
   createdAt DateTime @default(now())
@@ -51,30 +47,13 @@ model FriendRequest {
   toUser       User   @relation("FriendRequestTo", fields: [toUserUuid], references: [uuid], onDelete: Cascade, onUpdate: Cascade)
 
 }
-
 enum Status {
   ONLINE
   OFFLINE
 }
-
 enum Permission {
   READ
   CREATE
   DELETE
   UPDATE
 }
-
-// model Permission {
-//   uuid String @id @default(uuid())
-//   type String
-//   users User[]  
-// }
-
-// model UserOnPermission {
-//   user User @relation(fields: [userId], references: [uuid])
-//   userId String
-//   permission Permission @relation(fields: [permissionId],references: [uuid])
-//   permissionId String
-
-//   @@id([userId,permissionId])
-// }

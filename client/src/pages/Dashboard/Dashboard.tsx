@@ -4,22 +4,22 @@ import FriendsList from "../../components/FriendsList/FriendsList";
 import ContentArea from "../../components/ContentArea/ContentArea";
 import { useEffect, useRef, useState } from "react";
 import { io, Socket } from "socket.io-client";
-import { useDispatch, useSelector } from "react-redux";
 import { setSocket } from "../../redux/reducers/SocketReducer/SocketReducer";
 import ConfirmModal from "../../components/Modals/ConfirmModal/ConfirmModal";
 import AppButton from "../../components/Buttons/AppButton/AppButton";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux/reduxHook";
 
 const Dashboard = (props: Object) => {
-  const socketInReducer = useSelector(
+  const socketInReducer = useAppSelector(
     (state: any) => state?.SocketReducer?.socket
   );
 
-  const userData = useSelector(
+  const userData = useAppSelector(
     (state: any) => state?.AuthReducer?.user
   );
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const setSocketReducer = (socket: Socket) => dispatch(setSocket(socket));
 

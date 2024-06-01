@@ -12,24 +12,24 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { GlobalFetch } from "../../utils/Fetch/FetchUtils";
-import { useDispatch, useSelector } from "react-redux";
 import { setAuth } from "../../redux/reducers/AuthReducer/AuthReducer";
 // @ts-ignore: Unreachable code error
 import {NotificationManager} from 'react-notifications';
 import { Socket } from "socket.io-client";
 import { setSocket } from "../../redux/reducers/SocketReducer/SocketReducer";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux/reduxHook";
 
 const MenuList = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const unAuth = () => dispatch(setAuth(false));
-  const socket: Socket = useSelector(
+  const socket: Socket = useAppSelector(
   
     (state: any) => state?.SocketReducer?.socket
     );
 
-  const userData = useSelector((state:any)=> state?.AuthReducer?.user);
+  const userData = useAppSelector((state:any)=> state?.AuthReducer?.user);
   // zrobić hook 
   const [userStatus,setUserStatus ]= useState("connected");
 

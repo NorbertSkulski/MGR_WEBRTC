@@ -1,4 +1,3 @@
-import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.scss";
 import App from "./App";
@@ -10,7 +9,7 @@ import axios from "axios";
 
 
 axios.defaults.baseURL= String(process.env.REACT_APP_API_URL);
-axios.defaults.withCredentials = true;
+// axios.defaults.withCredentials = true;
 
 
 const root = ReactDOM.createRoot(
@@ -18,11 +17,9 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-  // <React.StrictMode>
     <Provider store={store}>
       <App />
     </Provider>
-  // </React.StrictMode>
 );
 
 // If you want your app to work offline and load faster, you can change
