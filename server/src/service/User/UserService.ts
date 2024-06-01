@@ -20,8 +20,6 @@ const registration = async (user: User): Promise<User> => {
   return await prisma.user.create({ data: { ...user, password: hashSync(user.password, 15) } });;
 }
 
-
-
 const friendRequest = async (body: FriendRequestType): Promise<FriendRequest> => {
 
   const toUser = await prisma.user.findFirst({ where: { id: Number(body.toUserUuid) } })
@@ -50,7 +48,6 @@ const friendRequest = async (body: FriendRequestType): Promise<FriendRequest> =>
 const friendRequestsLists = async (body: FriendRequestListsBodyType) => {
   return await prisma.friendRequest.findMany({ where: { toUserUuid: body.logedUser.uuid }, include: { fromUser: true, toUser: true } });
 }
-
 
 
 const acceptFriendRequest = async (data: AcceptFriendRequestType) => {
