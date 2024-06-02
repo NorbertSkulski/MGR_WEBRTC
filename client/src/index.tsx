@@ -9,8 +9,10 @@ import axios from "axios";
 
 
 axios.defaults.baseURL= String(process.env.REACT_APP_API_URL);
-// axios.defaults.withCredentials = true;
 
+if (process.env.NODE_ENV === 'development') {
+  axios.defaults.withCredentials = true;
+}
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

@@ -28,3 +28,4 @@ const server = (0, sockets_1.socketInit)(app);
 server.listen(port, () => {
     console.log(`⚡️[server]: Server is running at port: ${port}`);
 });
+exports.default = server;

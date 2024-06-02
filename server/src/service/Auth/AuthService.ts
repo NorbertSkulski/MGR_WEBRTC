@@ -29,6 +29,7 @@ type UserDataType = {
 const login = async (atuhCredentials: Atuh_Credentials) => {
     try {
         const user: User | null = await prisma.user.findFirst({ where: { login: atuhCredentials.login } ,include: { friendOf:true, friends: true, friendRequestFrom:true, friendRequestTo:true },});
+
         if (!user)
             throw loginError;
 
