@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install nginx -y
 RUN rm /etc/nginx/sites-available/default
 RUN rm /etc/nginx/sites-enabled/default
 WORKDIR /app
-COPY package.json /app
+COPY package.json ./
 COPY . .
 RUN npm install --unsafe-perm
 RUN npm run build
